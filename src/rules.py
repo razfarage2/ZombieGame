@@ -1,5 +1,5 @@
 from enum import Enum
-from player_status import PlayerStatus
+from src.player.player_status import PlayerStatus
 
 
 class Rules(Enum):

@@ -1,7 +1,5 @@
 import pprint
-import random
-from choice import Choice
-from dice import Dice
+from src.dice.choice import Choice
 from player_status import PlayerStatus
 
 
