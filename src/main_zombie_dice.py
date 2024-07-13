@@ -1,9 +1,9 @@
 import random
 import pprint
-from Rules import Rules
-from Dice import Dice
-from Player import Player
-from playerStatus import PlayerStatus
+from rules import Rules
+from dice import Dice
+from player import Player
+from player_status import PlayerStatus
 import time
 
 class Board:

@@ -1,6 +1,6 @@
 import unittest
-from Player import Player
-from Choice import Choice
+from src.player import Player
+from src.choice import Choice
 
 
 """This is a simple test to practice unitest"""
