@@ -1,10 +1,10 @@
 import random
 import pprint
-from Choice import Choice
-from Rules import Rules
-from Dice import Dice
-from Player import Player
-from playerStatus import PlayerStatus
+from choice import Choice
+from rules import Rules
+from dice import Dice
+from player import Player
+from player_status import PlayerStatus
 import time
 
 

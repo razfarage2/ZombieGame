@@ -1,8 +1,6 @@
 import pprint
-import random
-from Choice import Choice
-from Dice import Dice
-from playerStatus import PlayerStatus
+from src.dice.choice import Choice
+from player_status import PlayerStatus
 
 
 class Player:
