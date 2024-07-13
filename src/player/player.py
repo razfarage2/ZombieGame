@@ -1,6 +1,7 @@
 import pprint
 from src.dice.choice import Choice
 from src.player.player_status import PlayerStatus
+from src.util.util import generic_question
 
 
 class Player:
@@ -44,14 +45,6 @@ class Player:
     def should_throw(self):
         if self.number_of_rolls == 0:
             return True
-        else:
-            print("Do you want to throw again? (y/n)")
-            decision = input()
-            if decision == 'y':
-                return True
-            elif decision == 'n':
-                print("Let's move on to the next player then")
-                return False
-            else:
-                print("please choose a valid input, y/n")
-                self.should_throw()
+
+        return generic_question("Do you want to throw again? (y/n)",no_answer="Let's move on to the next player then")
+

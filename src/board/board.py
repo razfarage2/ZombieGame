@@ -6,6 +6,7 @@ from src.dice.dice import Dice
 from src.player.player import Player
 from src.player.player_status import PlayerStatus
 import time
+from src.util.util import generic_question
 
 
 class Board:
@@ -97,6 +98,22 @@ class Board:
         else:
             print("hahaha you have no choice")
 
+    def should_keep_dices(self, first_dice_roll, first_dice, second_dice_roll, second_dice):
+        new_first_dice, new_second_dice = first_dice, second_dice
+
+        if first_dice_roll == Choice.Footsteps:
+            should_generate_dice = not generic_question(
+                f"Do you want to throw the first dice again?(y/n)\n {first_dice.sides}")
+            if should_generate_dice:
+                new_first_dice = random.choice(self.dices)
+
+        if second_dice_roll == Choice.Footsteps:
+            should_generate_dice = not generic_question(
+                f"Do you want to throw the second dice again?(y/n)\n {second_dice.sides}")
+            if should_generate_dice:
+                new_second_dice = random.choice(self.dices)
+
+        return new_first_dice, new_second_dice
 
     def start_game(self):
         while not self.has_winner() or not self.one_alive():
@@ -105,17 +122,25 @@ class Board:
 
                 self.interact_player(player)
 
-                while player.should_throw():
-                    first_dice, second_dice = random.choice(self.dices), random.choice(self.dices)
+                first_dice, second_dice = random.choice(self.dices), random.choice(self.dices)
 
-                    first_dice_roll, second_dice_roll = self.throws_dices(first_dice,second_dice)
+                while player.should_throw():
+                    first_dice_roll, second_dice_roll = self.throws_dices(first_dice, second_dice)
                     self.update_score(first_dice_roll, second_dice_roll, player)
 
-        print("Game over, player won the game") # todo find who won
+                    first_dice, second_dice = self.should_keep_dices(first_dice_roll,first_dice,second_dice_roll,second_dice)
+
+        if self.has_winner() or not self.one_alive():
+            """
+            the for loop without the inner while, doesnt need to check the number of rolls or rest, last throws for
+            everyone with regual status
+            """
+
+
+        print("Game over, player won the game")     # todo find who won
 
 
 """Tomer Tasks"""
-# b. Check if he can keep one of the dices
-# c. Let him choose if to keep
 # e. If we got out of the while it means either all dead or there is a winner which means we should say it
 # g. If we have a winner, give all other players last round -> refactor the while above to a function that gets the players from outside
+# a. printing the dice side value and player name.
