@@ -29,7 +29,6 @@ class Board:
     def sleep(self):    # a simple delay
         time.sleep(1)
 
-
     """Checks  if the length of dead players are equal to all the players in the game"""
     def all_dead(self):
         dead_players = list(filter(lambda player: player.calculate_status() == PlayerStatus.Dead, self.players))
@@ -65,7 +64,7 @@ class Board:
                     print(self.has_winner(), self.all_dead())
                     return self.has_winner() and self.all_dead()
 
-    def throws_dices(self, first_dice, first_dice_roll, second_dice, second_dice_roll, player):
+    def throws_dices(self, first_dice, first_dice_roll, second_dice, second_dice_roll):
         self.sleep()
         print(first_dice)
         self.sleep()
@@ -84,66 +83,33 @@ class Board:
         self.sleep()
         player.increase_roll()
 
+    def interact_player(self, player):
+        print(f"Its your turn to throw {player}")
+        self.sleep()
+        print("are you ready to throw? (y/n)")
+        decision = input()
+        if decision == 'y':
+            print("throwing...")
+
+        else:
+            print("hahaha you have no choice")
+
 
     def start_game(self):
-        winning_score = 13
-        while not self.has_winner() or len(self.players) > 1:
-            if self.one_alive():    # this is ugly and need to be fixed, only used to understand the problem
-                print(f"Game over, {player} Won the game!")
-                break
+        while not self.has_winner() or not self.one_alive():
+            for player in self.players: # needs to change to while because after all players are iterated it will finish the game even though it might not be finished
+                first_dice, second_dice = random.choice(self.dices), random.choice(self.dices)
+                first_dice_roll, second_dice_roll = first_dice.roll(), second_dice.roll()
 
+                player.reset_rolls()
 
-            else:
-                for player in self.players: # needs to change to while because after all players are iterated it will finish the game even though it might not be finished
-                    """Need to figure out how to change this loop to achieve the same effect and for the
-                    dices to change if the player decides to roll again"""
+                self.interact_player(player)
 
-                    first_dice, second_dice = random.choice(self.dices), random.choice(self.dices)
-                    first_dice_roll, second_dice_roll = first_dice.roll(), second_dice.roll()
+                while player.should_throw():
+                    self.throws_dices(first_dice, second_dice, first_dice_roll, second_dice_roll)
+                    self.update_score(first_dice_roll, second_dice_roll, player)
 
-                    """Puts a win condition for the game """
-                    brain_count = player.score[Choice.Brains]
-                    if brain_count >= winning_score:
-                        print(f"{player} Wins! with {brain_count} Brains!")
-                        return
-
-                    """Resets the player number of rolls if he decides not to throw again"""
-                    player.number_of_rolls = 0
-
-
-                    while not self.one_alive():
-                        """If the number of rolls is not equal to 0,he can choose whether to throw again or not"""
-                        if player.number_of_rolls != 0:
-                            self.sleep()
-                            print("Do you want to throw again? (y/n)")
-                            decision = input()
-                            if decision == 'y':
-                                self.throws_dices(first_dice, second_dice, first_dice_roll, second_dice_roll, player)
-                                self.update_score(first_dice_roll, second_dice_roll, player)
-                            elif decision == 'n':
-                                self.sleep()
-                                print("Let's move on to the next player then")
-                                break
-
-                        else:
-                            """If the number of throws is equal to 0, the player has no choice but to throw"""
-                            self.sleep()
-                            print(f"Its your turn to throw {player}")
-                            self.sleep()
-                            print("are you ready to throw? (y/n)")
-                            decision = input()
-                            if decision == 'y':
-                                self.throws_dices(first_dice, second_dice, first_dice_roll, second_dice_roll, player)
-                                self.update_score(first_dice_roll, second_dice_roll, player)
-
-                            elif decision == 'n':
-                                print("hahaha you have no choice")
-                                self.throws_dices(first_dice, second_dice, first_dice_roll, second_dice_roll, player)
-                                self.update_score(first_dice_roll, second_dice_roll, player)
-                            else:
-                                """Raises a valueerror message that tells the player he has to input y or n"""
-                                raise ValueError(' Please respond only in y or n')
-
+        print("Game over, player won the game") # todo find who won
 
 
 
@@ -162,12 +128,6 @@ class Board:
 # b. Check if he can keep one of the dices
 # c. Let him choose if to keep
 # d. Generate new dices if needed.
-
 # f. Print the player score -> need a new function that returns the player score <-- DONE?
-
 # e. If we got out of the while it means either all dead or there is a winner which means we should say it
 # g. If we have a winner, give all other players last round -> refactor the while above to a function that gets the players from outside
-
-
-board = Board()
-board.start_game()
