@@ -7,7 +7,6 @@ class Player:
     def __init__(self):
         self.score = {Choice.Brains: 0, Choice.Shotguns: 0, Choice.Footsteps: 0}
         self.number_of_rolls = 0
-        self.player_status = PlayerStatus.Regular   # <-- I added this to make sure he starts as a regular status
 
     def increase_roll(self):
         self.number_of_rolls += 1
@@ -38,3 +37,21 @@ class Player:
     """A simple print of the score for the player to view at the end of each roll"""
     def print_score(self):
         pprint.pprint(self.score)
+
+    def reset_rolls(self):
+        self.number_of_rolls = 0
+
+    def should_throw(self):
+        if self.number_of_rolls == 0:
+            return True
+        else:
+            print("Do you want to throw again? (y/n)")
+            decision = input()
+            if decision == 'y':
+                return True
+            elif decision == 'n':
+                print("Let's move on to the next player then")
+                return False
+            else:
+                print("please choose a valid input, y/n")
+                self.should_throw()
