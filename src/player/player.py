@@ -1,6 +1,6 @@
 import pprint
 from src.dice.choice import Choice
-from player_status import PlayerStatus
+from src.player.player_status import PlayerStatus
 
 
 class Player:

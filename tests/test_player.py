@@ -1,5 +1,5 @@
 import unittest
-from src.player.player import Player
+from src.player import Player
 from src.dice.choice import Choice
 
 
