@@ -1,5 +1,5 @@
 import random
-from choice import Choice
+from src.dice.choice import Choice
 
 
 class Dice:
