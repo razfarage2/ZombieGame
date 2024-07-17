@@ -133,7 +133,6 @@ class Board:
             for other_player in self.players[i + 1:]:
                 if player.score[Choice.Brains] > other_player.score[Choice.Brains]:
                     print(f"Game over, {player} won the game with {player.score[Choice.Brains]} brains")
-                    pass
                 elif player.score[Choice.Brains] < other_player.score[Choice.Brains]:
                     print(f"Game over, {player} won the game with {player.score[Choice.Brains]} brains")
 
@@ -149,7 +148,7 @@ class Board:
                     first_dice, second_dice = random.choice(self.dices), random.choice(self.dices)
 
                     while player.should_throw():
-                        if not self.has_winner() or player.calculate_status() != PlayerStatus.Dead:
+                        if not player.calculate_status() != PlayerStatus.Winner or player.calculate_status() != PlayerStatus.Dead:
                             first_dice_roll, second_dice_roll = self.throws_dices(first_dice, second_dice)
                             self.update_score(first_dice_roll, second_dice_roll, player)
 
@@ -168,6 +167,6 @@ class Board:
 
 
 """Tomer Tasks"""
-# e. If we got out of the while it means either all dead or there is a winner which means we should say it
-# g. If we have a winner, give all other players last round -> refactor the while above to a function that gets the players from outside
 # a. printing the dice side value and player name.
+# b. loop doesn't end when a player dies.
+# c. last round only starts after a round is over.
