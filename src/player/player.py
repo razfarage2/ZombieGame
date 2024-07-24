@@ -28,7 +28,7 @@ class Player:
         if self.score[Choice.Brains] >= 13:
             return PlayerStatus.Winner
 
-        if self.score[Choice.Shotguns] >= 1:
+        elif self.score[Choice.Shotguns] >= 1:
             print("BAM..you died from a gunshot")
             return PlayerStatus.Dead
 
