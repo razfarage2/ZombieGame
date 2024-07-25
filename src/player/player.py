@@ -28,8 +28,8 @@ class Player:
         if self.score[Choice.Brains] >= 13:
             return PlayerStatus.Winner
 
-        if self.score[Choice.Shotguns] >= 3:
-            print("brrrr.... you died")
+        elif self.score[Choice.Shotguns] >= 1:
+            print("BAM..you died from a gunshot")
             return PlayerStatus.Dead
 
         return PlayerStatus.Regular
@@ -44,6 +44,6 @@ class Player:
     def should_throw(self):
         if self.number_of_rolls == 0:
             return True
-
-        return generic_question("Do you want to throw again? (y/n)",no_answer="Let's move on to the next player then")
+        if self.calculate_status() == PlayerStatus.Regular:
+            return generic_question("Do you want to throw again? (y/n)",no_answer="Let's move on to the next player then")
 

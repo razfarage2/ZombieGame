@@ -35,7 +35,6 @@ class Board:
         dead_players = list(filter(lambda player: player.calculate_status() == PlayerStatus.Dead, self.players))
         return len(dead_players) == len(self.players)   # <--- returns true or false depend on the outcome
 
-
     """This function checks with the any function if any of the players
     have status of a winner in the player in the game"""
     def has_winner(self):
@@ -52,17 +51,6 @@ class Board:
           num_dead_players = num_total_players - num_alive_players
 
           return (num_alive_players == 1) and (num_dead_players == num_total_players - 1)
-
-
-    """Checks if the player status is regular"""
-    def has_regular(self):
-        while True:
-            for player in self.players:
-                if player.calculate_status() == PlayerStatus.Regular:
-                    return PlayerStatus.Regular     # <--- returns true or false depend on the outcome
-                else:
-                    print(self.has_winner(), self.all_dead())
-                    return self.has_winner() and self.all_dead()
 
     def throws_dices(self, first_dice,second_dice):
         first_dice_roll, second_dice_roll = first_dice.roll(), second_dice.roll()
@@ -87,15 +75,20 @@ class Board:
         player.increase_roll()
 
     def interact_player(self, player):
-        print(f"Its your turn to throw {player}")
-        self.sleep()
-        print("are you ready to throw? (y/n)")
-        decision = input()
-        if decision == 'y':
-            print("throwing...")
+        if player.calculate_status() == PlayerStatus.Regular:
+            print(f"Its your turn to throw {player}")
+            self.sleep()
+            print("are you ready to throw? (y/n)")
+            decision = input()
+            if decision == 'y':
+                print("throwing...")
 
+            else:
+                print("hahaha you have no choice")
+        elif player.calculate_status() == PlayerStatus.Dead:
+            print("you died and cant roll again")
         else:
-            print("hahaha you have no choice")
+            print("you seem to be winning")
 
     def should_keep_dices(self, first_dice_roll, first_dice, second_dice_roll, second_dice):
         new_first_dice, new_second_dice = first_dice, second_dice
@@ -131,16 +124,17 @@ class Board:
     def announce_winner(self):
         for i, player in enumerate(self.players):
             for other_player in self.players[i + 1:]:
-                if player.score[Choice.Brains] > other_player.score[Choice.Brains]:
-                    print(f"Game over, {player} won the game with {player.score[Choice.Brains]} brains")
-                elif player.score[Choice.Brains] < other_player.score[Choice.Brains]:
-                    print(f"Game over, {player} won the game with {player.score[Choice.Brains]} brains")
+                if  not player.calculate_status() == PlayerStatus.Dead or not other_player.calculate_status() == PlayerStatus.Dead:
+                    if player.score[Choice.Brains] > other_player.score[Choice.Brains]:
+                        print(f"Game over, {player} won the game with {player.score[Choice.Brains]} brains")
+                    elif player.score[Choice.Brains] < other_player.score[Choice.Brains]:
+                        print(f"Game over, {other_player} won the game with {other_player.score[Choice.Brains]} brains")
 
 
     def start_game(self):
         while not self.has_winner() or not self.one_alive():
             for player in self.players:
-                if player.calculate_status() != PlayerStatus.Dead or player.calculate_status() != PlayerStatus.Winner:
+                if not self.one_alive():
                     player.reset_rolls()
 
                     self.interact_player(player)
@@ -148,25 +142,24 @@ class Board:
                     first_dice, second_dice = random.choice(self.dices), random.choice(self.dices)
 
                     while player.should_throw():
-                        if not player.calculate_status() != PlayerStatus.Winner or player.calculate_status() != PlayerStatus.Dead:
+                        if not player.calculate_status() == PlayerStatus.Winner or not player.calculate_status() == PlayerStatus.Dead:
                             first_dice_roll, second_dice_roll = self.throws_dices(first_dice, second_dice)
                             self.update_score(first_dice_roll, second_dice_roll, player)
 
                             first_dice, second_dice = self.should_keep_dices(first_dice_roll,first_dice,second_dice_roll,second_dice)
                         else:
                             break
-
-        if self.has_winner() or not self.one_alive():
+            break
+        if self.has_winner() and not self.one_alive():
             print("Final round lets see if you can keep up the Brains!")
             for player in self.players:
-                 self.last_round(player)
-
-
+                self.last_round(player)
 
         self.announce_winner()
 
 
 """Tomer Tasks"""
 # a. printing the dice side value and player name.
-# b. loop doesn't end when a player dies.
 # c. last round only starts after a round is over.
+# d. game doesn't end when a player dies
+# e. keep asking the player if he wants to save the dice even though he cant because he died
