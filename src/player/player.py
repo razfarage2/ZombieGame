@@ -6,6 +6,7 @@ from src.util.util import generic_question
 
 class Player:
     def __init__(self):
+        self.status = PlayerStatus.Regular
         self.score = {Choice.Brains: 0, Choice.Shotguns: 0, Choice.Footsteps: 0}
         self.number_of_rolls = 0
 
@@ -26,13 +27,13 @@ class Player:
     """Calculates the status of the player compered to rules of the game."""
     def calculate_status(self):
         if self.score[Choice.Brains] >= 13:
-            return PlayerStatus.Winner
-
+            self.status = PlayerStatus.Winner
         elif self.score[Choice.Shotguns] >= 1:
             print("BAM..you died from a gunshot")
-            return PlayerStatus.Dead
-
-        return PlayerStatus.Regular
+            self.status = PlayerStatus.Dead
+        else:
+            self.status = PlayerStatus.Regular
+        return self.status
 
     """A simple print of the score for the player to view at the end of each roll"""
     def print_score(self):
