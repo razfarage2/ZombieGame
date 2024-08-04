@@ -26,9 +26,9 @@ class Player:
 
     """Calculates the status of the player compered to rules of the game."""
     def calculate_status(self):
-        if self.score[Choice.Brains] >= 13:
+        if self.score[Choice.Brains] >= 3:
             self.status = PlayerStatus.Winner
-        elif self.score[Choice.Shotguns] >= 3:
+        elif self.score[Choice.Shotguns] >= 300:
             # print("BAM..you died from a gunshot")
             self.status = PlayerStatus.Dead
         else:
