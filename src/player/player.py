@@ -9,7 +9,7 @@ class Player:
     def __init__(self, name=None):
         self.name = self.gen_names()
         self.status = PlayerStatus.Regular
-        self.score = {Choice.Brains: 0, Choice.Shotguns: 0, Choice.Footsteps: 0}
+        self.score = {Choice.Brains.value: 0, Choice.Shotguns.value: 0, Choice.Footsteps.value: 0}
         self.number_of_rolls = 0
 
     def gen_names(self):
@@ -23,17 +23,17 @@ class Player:
 
     def increase_score(self, rolls):
         """what ever the outcome of the roll is, it will update 1 on the score"""
-        for roll in rolls:
-            self.score[roll] += 1
+        for roll in Choice:
+            self.score[roll.value] += 1
         if self.number_of_rolls >= 3:
-            for extraroll in rolls:
+            for extraroll in Choice:
                 self.score[extraroll] += 2
 
     """Calculates the status of the player compered to rules of the game."""
     def calculate_status(self):
-        if self.score[Choice.Brains] >= 3:
+        if self.score[Choice.Brains.value] >= 3:
             self.status = PlayerStatus.Winner
-        elif self.score[Choice.Shotguns] >= 300:
+        elif self.score[Choice.Shotguns.value] >= 300:
             # print("BAM..you died from a gunshot")
             self.status = PlayerStatus.Dead
         else:
@@ -42,7 +42,7 @@ class Player:
 
     """A simple print of the score for the player to view at the end of each roll"""
     def print_score(self):
-        pprint.pprint(self.score)
+        pprint.pprint(f"You rolled so far: {self.score}")
 
     """Resets the number of rolls"""
     def reset_rolls(self):

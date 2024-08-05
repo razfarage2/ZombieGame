@@ -59,14 +59,14 @@ class Board:
     def throws_dices(self, first_dice,second_dice):
         first_dice_roll, second_dice_roll = first_dice.roll(), second_dice.roll()
         self.add_delay()
-        print(first_dice.sides)
+        print(f"this dice has: {first_dice.sides}")
         self.add_delay()
-        print(first_dice_roll)
+        print(f"You rolled: {first_dice_roll}")
         self.add_delay()
 
-        print(second_dice.sides)
+        print(f"This dice has: {second_dice.sides}")
         self.add_delay()
-        print(second_dice_roll)
+        print(f"You rolled: {second_dice_roll}")
         self.add_delay()
 
         return first_dice_roll, second_dice_roll
@@ -82,7 +82,7 @@ class Board:
     """Interaction with the players, asks him questions about throwing the dices and recives input"""
     def interact_player(self, player):
         if player.calculate_status() == PlayerStatus.Regular and not self.has_winner():
-            print(f"Its your turn to throw {player.name}")
+            print(f"{player.name}, Its your turn to throw")
             self.add_delay()
             print("are you ready to throw? (y/n)")
             decision = input()
