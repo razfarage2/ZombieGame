@@ -200,9 +200,3 @@ class Board:
             print(self.one_alive())
             self.add_delay()
             self.print_all_scores()
-
-
-"""Tomer Tasks"""
-# a. printing the dice side value.
-
-
